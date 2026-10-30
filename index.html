@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#071733">
+<meta name="description" content="Raspa y Gana PrestaYa - Recompensa por tu puntualidad">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Raspa y Gana – PrestaYa</title>
+<style>
+/* =========================================================
+   RASPA Y GANA – PRESTAYA  ·  v1.0
+   Prototipo visual y funcional (modo demostración)
+   ========================================================= */
+:root{
+  --navy-950:#040e22;
+  --navy-900:#071733;
+  --navy-800:#0b2350;
+  --blue-600:#1554c0;
+  --blue-500:#2a6fe0;
+  --green-600:#0f9d58;
+  --green-500:#16b364;
+  --lime-400:#b6f23a;
+  --white:#ffffff;
+  --text:#eaf1ff;
+  --muted:#9fb3d6;
+  --glass:rgba(255,255,255,.07);
+  --glass-brd:rgba(255,255,255,.14);
+  --radius:22px;
+  --shadow:0 18px 50px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(120% 60% at 100% 0%, rgba(42,111,224,.35) 0%, transparent 60%),
+    radial-gradient(90% 50% at 0% 100%, rgba(22,179,100,.22) 0%, transparent 60%),
+    linear-gradient(180deg,var(--navy-900),var(--navy-950));
+  background-attachment:fixed;
+  overflow-x:hidden;
+  min-height:100dvh;
+}
+.app{
+  width:100%;max-width:440px;margin:0 auto;
+  padding:calc(14px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
+  min-height:100dvh;display:flex;flex-direction:column;
+}
+
+/* ---------- Cabecera ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-name{font-weight:900;font-size:28px;letter-spacing:-.8px;line-height:1}
+.brand-name span{color:var(--lime-400)}
+.brand-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.top-actions{display:flex;gap:8px}
+.admin-pill{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.8px;color:#06210f;background:var(--lime-400);border-radius:6px;padding:2px 6px;margin-left:6px;vertical-align:2px}
+.icon-btn{
+  width:44px;height:44px;border-radius:14px;border:1px solid var(--glass-brd);
+  background:var(--glass);color:var(--text);display:grid;place-items:center;cursor:pointer;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);flex:none;
+}
+.icon-btn svg{width:20px;height:20px}
+
+/* ---------- Banner demo ---------- */
+.demo-tag{
+  display:flex;align-items:center;gap:8px;font-size:11.5px;color:#ffd98a;
+  background:rgba(255,190,60,.08);border:1px solid rgba(255,190,60,.25);
+  padding:7px 11px;border-radius:12px;margin-bottom:14px;line-height:1.35;
+}
+.demo-tag b{font-weight:700}
+
+/* ---------- Glass ---------- */
+.glass{
+  background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.03));
+  border:1px solid var(--glass-brd);border-radius:var(--radius);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:var(--shadow);
+}
+
+/* ---------- Pantallas ---------- */
+.screen{display:none;flex-direction:column;flex:1;animation:fadeUp .45s ease both}
+.screen.active{display:flex}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------- Inicio ---------- */
+.hero{padding:26px 20px 22px;text-align:center;position:relative;overflow:hidden}
+.hero::before{
+  content:"";position:absolute;inset:-40% -20% auto;height:200px;
+  background:radial-gradient(closest-side,rgba(182,242,58,.18),transparent);pointer-events:none;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;color:var(--lime-400);background:rgba(182,242,58,.1);
+  border:1px solid rgba(182,242,58,.3);padding:6px 12px;border-radius:999px;margin-bottom:16px;
+}
+.hero h1{font-size:34px;line-height:1.05;font-weight:900;letter-spacing:-1px;margin-bottom:6px}
+.hero h1 .g{background:linear-gradient(90deg,var(--green-500),var(--lime-400));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:15px;line-height:1.55;color:#cfdcf5;margin-top:14px}
+.ticket-art{width:150px;margin:18px auto 4px;display:block;filter:drop-shadow(0 12px 22px rgba(0,0,0,.45))}
+
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.stat{padding:14px 14px 12px}
+.stat-label{font-size:11.5px;color:var(--muted);margin-bottom:4px}
+.stat-value{font-size:26px;font-weight:800;letter-spacing:-.5px}
+.stat-value.green{color:var(--lime-400)}
+
+.btn{
+  width:100%;min-height:56px;border:none;border-radius:16px;cursor:pointer;
+  font-size:16.5px;font-weight:800;letter-spacing:.2px;color:#06210f;
+  background:linear-gradient(135deg,var(--lime-400),var(--green-500));
+  box-shadow:0 12px 28px -10px rgba(22,179,100,.8),inset 0 1px 0 rgba(255,255,255,.5);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform .12s ease,filter .2s;
+}
+.btn:active{transform:scale(.97)}
+.btn:disabled{filter:grayscale(1) brightness(.7);cursor:not-allowed;box-shadow:none}
+.btn.secondary{background:var(--glass);color:var(--text);border:1px solid var(--glass-brd);box-shadow:none}
+.btn.small{min-height:46px;font-size:14.5px;border-radius:13px}
+.btn svg{width:20px;height:20px}
+.hint{font-size:12.5px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.45}
+
+.history{margin-top:16px;padding:14px 16px}
+.history h3{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.history ul{list-style:none;display:flex;flex-direction:column;gap:6px;max-height:180px;overflow:auto}
+.history li{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.08)}
+.history li:last-child{border-bottom:none}
+.history li span:last-child{color:var(--muted);font-size:12px;white-space:nowrap}
+.history .empty{color:var(--muted);font-size:13px}
+
+/* ---------- Juego ---------- */
+.game-head{text-align:center;margin:4px 0 16px}
+.game-head h2{font-size:22px;font-weight:800;letter-spacing:-.4px}
+.game-head p{font-size:13.5px;color:var(--muted);margin-top:4px}
+
+.ticket{
+  position:relative;padding:16px;border-radius:26px;
+  background:linear-gradient(150deg,#0e2c63,#0a1f47 55%,#0b2a3a);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 30px 60px -20px rgba(0,0,0,.7),0 0 0 1px rgba(182,242,58,.08),inset 0 1px 0 rgba(255,255,255,.08);
+}
+.ticket-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 4px}
+.ticket-top .t1{font-weight:900;font-size:15px;letter-spacing:1.5px}
+.ticket-top .t1 span{color:var(--lime-400)}
+.ticket-top .t2{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+/* muescas laterales tipo boleto */
+.ticket::before,.ticket::after{
+  content:"";position:absolute;top:50%;width:22px;height:22px;border-radius:50%;
+  background:var(--navy-950);transform:translateY(-50%);
+}
+.ticket::before{left:-11px}.ticket::after{right:-11px}
+
+.scratch-area{
+  position:relative;width:100%;aspect-ratio:1/1;border-radius:18px;overflow:hidden;
+  background:radial-gradient(120% 90% at 50% 0%,#14396f,#0a1d42);
+  touch-action:none;user-select:none;-webkit-user-select:none;
+}
+.prize-under{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:20px;gap:8px;
+}
+.prize-under .p-icon{width:96px;height:96px}
+.prize-under .p-title{font-size:25px;font-weight:900;letter-spacing:-.5px;line-height:1.1}
+.prize-under .p-desc{font-size:13.5px;color:#cfdcf5;max-width:260px}
+.prize-under.win .p-title{color:var(--lime-400)}
+#scratchCanvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab;transition:opacity .6s ease}
+#scratchCanvas.gone{opacity:0;pointer-events:none}
+
+.progress-wrap{margin-top:14px;padding:0 4px}
+.progress-row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
+.progress{height:8px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.progress > i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--green-500),var(--lime-400));transition:width .2s}
+
+/* ---------- Resultado ---------- */
+.result{padding:26px 20px 22px;text-align:center;position:relative;overflow:hidden}
+.result .r-icon{width:110px;height:110px;margin:0 auto 10px;animation:pop .7s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes pop{0%{transform:scale(.2) rotate(-12deg);opacity:0}100%{transform:none;opacity:1}}
+.result h2{font-size:28px;font-weight:900;letter-spacing:-.6px;line-height:1.1}
+.result.win h2{background:linear-gradient(90deg,#fff,var(--lime-400));-webkit-background-clip:text;background-clip:text;color:transparent}
+.result .r-desc{font-size:14.5px;color:#cfdcf5;margin-top:8px;line-height:1.5}
+.boletas{
+  display:inline-flex;align-items:baseline;gap:8px;margin:18px 0 6px;padding:12px 22px;border-radius:16px;
+  background:rgba(182,242,58,.1);border:1px solid rgba(182,242,58,.35);
+}
+.extra-box{display:inline-flex;align-items:center;gap:10px;margin:18px 0 4px;padding:12px 18px;border-radius:16px;background:rgba(42,111,224,.14);border:1px solid rgba(120,170,255,.4);font-size:14px;font-weight:600;color:#dbe7ff}
+.extra-box b{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--lime-400);color:#06210f;font-size:20px;font-weight:900;animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.12)}}
+.boletas b{font-size:40px;font-weight:900;color:var(--lime-400);line-height:1}
+.boletas span{font-size:14px;color:#dff7b0;font-weight:600}
+.thanks{font-size:13.5px;color:var(--muted);margin-top:14px;line-height:1.5}
+.used-tag{
+  display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:12px;color:var(--muted);
+  border:1px solid var(--glass-brd);padding:6px 12px;border-radius:999px;
+}
+.result-actions{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.glow{position:absolute;inset:auto -30% -60%;height:260px;background:radial-gradient(closest-side,rgba(182,242,58,.25),transparent);pointer-events:none}
+
+/* ---------- Configuración (hoja inferior) ---------- */
+.sheet-backdrop{position:fixed;inset:0;background:rgba(2,8,20,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:40;opacity:0;pointer-events:none;transition:opacity .25s}
+.sheet-backdrop.open{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;left:50%;bottom:0;width:100%;max-width:440px;max-height:88dvh;overflow:auto;z-index:50;
+  transform:translate(-50%,105%);transition:transform .32s cubic-bezier(.2,.9,.3,1);
+  background:linear-gradient(180deg,#0d2450,#081a3a);border:1px solid var(--glass-brd);border-bottom:none;
+  border-radius:24px 24px 0 0;padding:10px 16px calc(20px + env(safe-area-inset-bottom));
+}
+.sheet.open{transform:translate(-50%,0)}
+.sheet-grip{width:44px;height:5px;border-radius:9px;background:rgba(255,255,255,.25);margin:4px auto 12px}
+.sheet h3{font-size:18px;font-weight:800;margin-bottom:4px}
+.sheet .sub{font-size:12.5px;color:var(--muted);margin-bottom:14px;line-height:1.45}
+.cfg-item{padding:12px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);margin-bottom:10px}
+.cfg-row{display:flex;gap:8px;margin-bottom:8px}
+.cfg-row:last-child{margin-bottom:0}
+.field{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
+.field label{font-size:11px;color:var(--muted);font-weight:600}
+.field input,.field select{
+  width:100%;min-height:42px;border-radius:11px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(0,0,0,.25);color:var(--text);padding:0 11px;font-size:14.5px;font-family:inherit;outline:none;
+}
+.field input:focus,.field select:focus{border-color:var(--lime-400)}
+.field.w-sm{flex:0 0 84px}
+.prob-note{font-size:11.5px;color:var(--muted);margin:4px 2px 12px}
+.sheet .section-title{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin:18px 0 8px}
+.sheet-actions{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* ---------- Agregar / eliminar premios ---------- */
+.cfg-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.cfg-head b{font-size:12px;color:var(--lime-400);letter-spacing:.6px;text-transform:uppercase}
+.del-prize{width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,107,107,.35);background:rgba(255,107,107,.08);color:#ff8f8f;display:grid;place-items:center;cursor:pointer}
+.del-prize svg{width:17px;height:17px}
+.add-prize{width:100%;min-height:52px;border-radius:16px;border:1.5px dashed rgba(182,242,58,.5);background:rgba(182,242,58,.06);color:var(--lime-400);font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;margin-bottom:6px}
+.add-prize svg{width:22px;height:22px}
+.add-prize:active{transform:scale(.98)}
+
+/* ---------- Bloqueo / acceso ---------- */
+.lock{padding:28px 20px;text-align:center}
+.lock h2{font-size:22px;font-weight:800;margin:10px 0 6px}
+.lock p{font-size:14px;color:#cfdcf5;line-height:1.5;margin-bottom:18px}
+.lock .lock-ico{width:64px;height:64px;margin:0 auto;border-radius:20px;display:grid;place-items:center;background:rgba(182,242,58,.1);border:1px solid rgba(182,242,58,.3);color:var(--lime-400)}
+.lock .lock-ico svg{width:30px;height:30px}
+.pin-input{width:100%;min-height:54px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.25);color:var(--text);text-align:center;font-size:24px;letter-spacing:10px;font-weight:800;outline:none;margin-bottom:12px}
+.pin-input:focus{border-color:var(--lime-400)}
+.lock .divider{font-size:12.5px;color:var(--muted);margin-top:18px;line-height:1.5}
+
+/* ---------- Compartir ---------- */
+.link-box{width:100%;min-height:74px;resize:none;border-radius:12px;border:1px dashed rgba(182,242,58,.45);background:rgba(182,242,58,.06);color:#dff7b0;font-size:12px;padding:10px;font-family:ui-monospace,Menlo,monospace;word-break:break-all;outline:none}
+.invites{list-style:none;display:flex;flex-direction:column;gap:6px}
+.invites li{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:13px}
+.invites li .who{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.invites li .who small{display:block;color:var(--muted);font-size:11.5px}
+.mini-btn{flex:none;min-height:36px;padding:0 12px;border-radius:10px;border:1px solid var(--glass-brd);background:var(--glass);color:var(--text);font-size:12.5px;font-weight:700;cursor:pointer}
+.warn{font-size:12px;color:#ffd98a;background:rgba(255,190,60,.08);border:1px solid rgba(255,190,60,.25);padding:9px 11px;border-radius:12px;margin-bottom:12px;line-height:1.45}
+.btn.wa{background:linear-gradient(135deg,#2bd96b,#14a64a);color:#04210f}
+.hidden{display:none!important}
+
+/* ---------- Toast ---------- */
+.toast{
+  position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,30px);
+  background:#0f2a57;border:1px solid var(--glass-brd);color:var(--text);padding:12px 16px;border-radius:14px;
+  font-size:13.5px;z-index:80;opacity:0;transition:.3s;max-width:calc(100% - 32px);text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- Confeti ---------- */
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
+
+.footer{margin-top:auto;padding-top:18px;text-align:center;font-size:11px;color:rgba(159,179,214,.6)}
+
+@media (max-width:370px){
+  .hero h1{font-size:29px}
+  .brand-name{font-size:25px}
+  .stat-value{font-size:22px}
+  .prize-under .p-title{font-size:22px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+
+<div class="app">
+  <!-- Cabecera -->
+  <header class="topbar">
+    <div class="brand">
+      <div>
+        <div class="brand-name">Presta<span>Ya</span></div>
+        <div class="brand-sub">Raspa y Gana · v<span id="appVersion"></span><span class="admin-pill hidden" id="adminPill">ADMIN</span></div>
+      </div>
+    </div>
+    <div class="top-actions hidden" id="adminActions">
+    <button class="icon-btn" id="btnShare" aria-label="Compartir enlace">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+    </button>
+    <button class="icon-btn" id="btnConfig" aria-label="Configuración">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    </div>
+  </header>
+
+  <div class="demo-tag hidden" id="demoTag">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+    <div><b>Modo administrador · jugadas infinitas.</b> El sorteo es local (prototipo); solo tú ves este aviso.</div>
+  </div>
+
+  <!-- ===== PANTALLA 0: ACCESO (sin invitación) ===== -->
+  <section class="screen" id="scrLock">
+    <div class="glass lock">
+      <div class="lock-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+      <h2>Enlace no válido</h2>
+      <p>Este enlace no es válido o fue modificado. Pide uno nuevo a PrestaYa.</p>
+    </div>
+    <div class="footer">© PrestaYa · v<span class="ver"></span></div>
+  </section>
+
+  <!-- ===== PANTALLA 1: INICIO ===== -->
+  <section class="screen" id="scrHome">
+    <div class="glass hero">
+      <div class="hero-badge">★ Premio a tu puntualidad</div>
+      <div class="hidden" id="helloName" style="font-size:15px;font-weight:700;margin-bottom:6px"></div>
+      <h1>Raspa y <span class="g">Gana</span></h1>
+      <svg class="ticket-art" viewBox="0 0 160 110" aria-hidden="true">
+        <defs>
+          <linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a6fe0"/><stop offset="1" stop-color="#0b2350"/></linearGradient>
+          <linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f6fa"/><stop offset=".5" stop-color="#a9b2c2"/><stop offset="1" stop-color="#dde2ea"/></linearGradient>
+        </defs>
+        <path d="M14 8h132a8 8 0 0 1 8 8v26a12 12 0 0 0 0 26v26a8 8 0 0 1-8 8H14a8 8 0 0 1-8-8V68a12 12 0 0 0 0-26V16a8 8 0 0 1 8-8z" fill="url(#tg)" stroke="rgba(255,255,255,.2)"/>
+        <rect x="26" y="26" width="108" height="58" rx="10" fill="url(#sg)"/>
+        <path d="M34 70c18-14 30 4 46-10s28 2 44-8" stroke="#0b2350" stroke-width="9" stroke-linecap="round" fill="none" opacity=".9"/>
+        <circle cx="128" cy="30" r="5" fill="#b6f23a"/>
+      </svg>
+      <p>En PrestaYa valoramos tu puntualidad y queremos recompensar tu esfuerzo. Raspa tu tarjeta y descubre tu premio.</p>
+    </div>
+
+    <div class="stats">
+      <div class="glass stat">
+        <div class="stat-label">Participaciones disponibles</div>
+        <div class="stat-value green" id="statAvail">0</div>
+      </div>
+      <div class="glass stat">
+        <div class="stat-label">Boletas acumuladas</div>
+        <div class="stat-value" id="statTickets">0</div>
+      </div>
+    </div>
+
+    <button class="btn" id="btnPlay">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <span id="btnPlayText">Raspar mi tarjeta</span>
+    </button>
+    <div class="hint" id="homeHint">Cada participación permite una sola jugada.</div>
+
+    <div class="glass history">
+      <h3 id="historyTitle">Historial de premios</h3>
+      <ul id="historyList"></ul>
+    </div>
+
+    <div class="footer">© PrestaYa · v<span class="ver"></span></div>
+  </section>
+
+  <!-- ===== PANTALLA 2: JUEGO ===== -->
+  <section class="screen" id="scrGame">
+    <div class="game-head">
+      <h2>Tu tarjeta está lista</h2>
+      <p>Desliza el dedo sobre la capa plateada</p>
+    </div>
+
+    <div class="ticket">
+      <div class="ticket-top">
+        <div class="t1">RASPA <span>Y</span> GANA</div>
+        <div class="t2" id="ticketCode">#0000</div>
+      </div>
+      <div class="scratch-area" id="scratchArea">
+        <div class="prize-under" id="prizeUnder"></div>
+        <canvas id="scratchCanvas" aria-label="Superficie para raspar"></canvas>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-row"><span>Premio descubierto</span><span id="pctText">0%</span></div>
+        <div class="progress"><i id="pctBar"></i></div>
+      </div>
+    </div>
+    <div class="hint">Cuando descubras el texto del premio, se revelará automáticamente.</div>
+  </section>
+
+  <!-- ===== PANTALLA 3: RESULTADO ===== -->
+  <section class="screen" id="scrResult">
+    <div class="glass result" id="resultCard">
+      <div class="glow"></div>
+      <div class="r-icon" id="rIcon"></div>
+      <h2 id="rTitle"></h2>
+      <div class="r-desc" id="rDesc"></div>
+      <div id="rBoletas"></div>
+      <div class="extra-box hidden" id="rExtra">Tu nueva tarjeta se activa en <b id="rCount">3</b></div>
+      <div class="thanks" id="rThanks"></div>
+      <div class="used-tag">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>
+        Participación <span id="rCode"></span> utilizada
+      </div>
+    </div>
+    <div class="result-actions">
+      <button class="btn wa hidden" id="btnReport">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.3-.8-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.6 2 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>
+        Reportar mi premio por WhatsApp
+      </button>
+      <button class="btn hidden" id="btnPlayAgain">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        Raspar mi nueva tarjeta
+      </button>
+      <button class="btn" id="btnHome">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8M5 9.5V21h14V9.5"/></svg>
+        Volver al inicio
+      </button>
+    </div>
+  </section>
+</div>
+
+<!-- ===== CONFIGURACIÓN ===== -->
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+<div class="sheet" id="sheet" role="dialog" aria-label="Configuración">
+  <div class="sheet-grip"></div>
+  <h3>Configuración de premios</h3>
+  <div class="sub">Edita los textos, el icono y el peso (probabilidad relativa) de cada resultado. Los enlaces que generes después llevarán esta configuración.</div>
+  <div id="cfgList"></div>
+  <button class="add-prize" id="btnAddPrize" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    Agregar premio
+  </button>
+  <div class="prob-note" id="probNote"></div>
+
+  <div class="section-title">Administrador</div>
+  <div class="cfg-item">
+    <div class="cfg-row">
+      <div class="field"><label>WhatsApp del negocio (para reportes)</label><input type="tel" id="cfgWa" inputmode="tel" placeholder="Ej: 3001234567" maxlength="15"></div>
+    </div>
+  </div>
+
+  <div class="sheet-actions">
+    <button class="btn small" id="btnSaveCfg">Guardar configuración</button>
+    <div class="row-2">
+      <button class="btn small secondary" id="btnDefaults">Premios por defecto</button>
+      <button class="btn small secondary" id="btnResetDemo">Borrar historial</button>
+    </div>
+    <button class="btn small secondary" id="btnCloseCfg">Cerrar</button>
+  </div>
+</div>
+
+<!-- ===== COMPARTIR ENLACE ===== -->
+<div class="sheet" id="shareSheet" role="dialog" aria-label="Compartir juego">
+  <div class="sheet-grip"></div>
+  <h3>Compartir con un cliente</h3>
+  <div class="sub">Genera un enlace personal. El cliente solo verá el juego, sin opciones de administración.</div>
+  <div class="warn hidden" id="fileWarn">Estás abriendo el archivo directamente desde el celular. El enlace funcionará cuando el juego esté publicado en tu repositorio (por ejemplo, GitHub Pages).</div>
+  <div class="cfg-item">
+    <div class="cfg-row">
+      <div class="field"><label>Nombre del cliente</label><input id="invName" maxlength="40" placeholder="Ej: María Pérez"></div>
+    </div>
+    <div class="cfg-row">
+      <div class="field"><label>WhatsApp del cliente (opcional)</label><input id="invPhone" type="tel" inputmode="tel" maxlength="15" placeholder="3001234567"></div>
+      <div class="field w-sm"><label>Jugadas</label><input id="invPlays" type="number" min="1" max="10" value="1" inputmode="numeric"></div>
+    </div>
+  </div>
+  <button class="btn small" id="btnGenLink">Generar enlace</button>
+
+  <div class="hidden" id="linkResult" style="margin-top:12px">
+    <textarea class="link-box" id="linkBox" readonly></textarea>
+    <div class="sheet-actions" style="margin-top:8px">
+      <button class="btn small wa" id="btnSendWa">Enviar por WhatsApp</button>
+      <div class="row-2">
+        <button class="btn small secondary" id="btnCopyLink">Copiar enlace</button>
+        <button class="btn small secondary" id="btnNativeShare">Compartir…</button>
+      </div>
+      <button class="btn small secondary" id="btnTestLink">Probar como cliente</button>
+    </div>
+  </div>
+
+  <div class="section-title">Enlaces generados</div>
+  <ul class="invites" id="invList"></ul>
+  <div class="sheet-actions" style="margin-top:12px">
+    <button class="btn small secondary" id="btnCloseShare">Cerrar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   RASPA Y GANA – PRESTAYA
+   ---------------------------------------------------------------------
+   Estructura del código:
+     1. APP_CONFIG ............ Constantes generales y premios por defecto
+     2. ICONS ................. Iconos SVG de los resultados
+     3. Store / Invite ........ Persistencia local y enlaces de invitación
+     4. Proveedores demo ...... AdminProvider (jugadas infinitas) y
+                                InviteProvider (cliente con enlace).
+                                Sorteo local, NO seguro.
+     5. ProductionProvider .... CONTRATO para la futura integración con
+                                PrestaYa + backend (sin implementar)
+     6. ScratchCard ........... Componente de raspado con Canvas
+     7. Confetti .............. Efecto de celebración
+     8. UI / Controlador ...... Pantallas, configuración y flujo de juego
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. CONFIGURACIÓN GENERAL
+   --------------------------------------------------------------------- */
+const APP_CONFIG = {
+  version: '1.4',
+  mode: 'demo',                 // 'demo' | 'production' (futuro)
+  defaultPin: '1234',           // PIN inicial del administrador
+  inviteSalt: 'PrestaYa·RyG',   // ofuscación del enlace (NO es seguridad real)
+  revealThreshold: 0.80,        // 80 % de la zona del TEXTO del premio descubierta => se revela
+  fallbackThreshold: 0.70,      // respaldo: 70 % de toda la tarjeta
+  brushRadius: 22,              // radio del "dedo" en px CSS
+  demoInitialParticipations: 3,
+  storageKey: 'prestaya_raspa_v1',
+  defaultPrizes: [
+    { id:'b1', tickets:1, icon:'ticket1', title:'¡Ganaste 1 boleta!',  desc:'Tu boleta ya participa en el próximo sorteo PrestaYa.', weight:35 },
+    { id:'b2', tickets:2, icon:'ticket2', title:'¡Ganaste 2 boletas!', desc:'Duplicas tus oportunidades en el próximo sorteo.',     weight:15 },
+    { id:'b3', tickets:3, icon:'ticket3', title:'¡Ganaste 3 boletas!', desc:'Premio mayor: triplicas tus oportunidades de ganar.', weight:5  },
+    { id:'b0', tickets:0, icon:'retry',   title:'¡Sigue participando!', desc:'Esta vez no hubo premio. Sigue pagando a tiempo y vuelve a intentarlo.', weight:45 }
+  ]
+};
+
+/* ---------------------------------------------------------------------
+   2. ICONOS SVG (sin dependencias externas)
+   --------------------------------------------------------------------- */
+const ICONS = {
+  _uid:0,
+  _ticket(n){
+    const gid = 'ig' + n + '_' + (++this._uid);   // id único: evita choques entre SVG repetidos
+    return `<svg viewBox="0 0 120 120" aria-hidden="true">
+      <defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#b6f23a"/><stop offset="1" stop-color="#16b364"/></linearGradient></defs>
+      <circle cx="60" cy="60" r="56" fill="rgba(182,242,58,.10)" stroke="rgba(182,242,58,.35)"/>
+      <g transform="rotate(-12 60 60)">
+        <path d="M24 38h72a6 6 0 0 1 6 6v8a8 8 0 0 0 0 16v8a6 6 0 0 1-6 6H24a6 6 0 0 1-6-6v-8a8 8 0 0 0 0-16v-8a6 6 0 0 1 6-6z" fill="url(#${gid})"/>
+        <path d="M78 40v40" stroke="#06210f" stroke-width="2" stroke-dasharray="4 4" opacity=".5"/>
+        <text x="48" y="70" text-anchor="middle" font-family="system-ui,Arial" font-weight="900" font-size="30" fill="#06210f">${n}</text>
+        <path d="M90 56l2 4 4 .6-3 3 .7 4-3.7-2-3.7 2 .7-4-3-3 4-.6z" fill="#06210f" opacity=".75"/>
+      </g></svg>`;
+  },
+  ticket1(){ return this._ticket(1); },
+  ticket2(){ return this._ticket(2); },
+  ticket3(){ return this._ticket(3); },
+  star(){
+    return `<svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="rgba(182,242,58,.10)" stroke="rgba(182,242,58,.35)"/>
+      <path d="M60 24l10.6 21.5 23.7 3.4-17.2 16.8 4.1 23.6L60 78.2 38.8 89.3l4.1-23.6L25.7 48.9l23.7-3.4z" fill="#b6f23a"/></svg>`;
+  },
+  gift(){
+    return `<svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="rgba(182,242,58,.10)" stroke="rgba(182,242,58,.35)"/>
+      <rect x="30" y="52" width="60" height="38" rx="5" fill="#16b364"/><rect x="26" y="40" width="68" height="14" rx="4" fill="#b6f23a"/>
+      <rect x="55" y="40" width="10" height="50" fill="#06210f" opacity=".35"/>
+      <path d="M60 40c-8-14-24-12-20-2 3 6 20 2 20 2zm0 0c8-14 24-12 20-2-3 6-20 2-20 2z" fill="#b6f23a"/></svg>`;
+  },
+  again(){
+    return `<svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="rgba(182,242,58,.10)" stroke="rgba(182,242,58,.35)"/>
+      <rect x="30" y="36" width="44" height="54" rx="8" fill="#2a6fe0" transform="rotate(-10 52 63)"/>
+      <rect x="44" y="30" width="44" height="54" rx="8" fill="#cfd6e2" stroke="#ffffff" stroke-width="2"/>
+      <circle cx="66" cy="57" r="15" fill="#16b364"/>
+      <path d="M66 49v16M58 57h16" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/></svg>`;
+  },
+  retry(){
+    return `<svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="rgba(42,111,224,.14)" stroke="rgba(120,170,255,.35)"/>
+      <path d="M84 52a26 26 0 1 0 2 16" fill="none" stroke="#8fb6ff" stroke-width="8" stroke-linecap="round"/>
+      <path d="M88 34v20H68" fill="none" stroke="#8fb6ff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  }
+};
+const ICON_OPTIONS = [
+  ['ticket1','Boleta ×1'],['ticket2','Boleta ×2'],['ticket3','Boleta ×3'],
+  ['star','Estrella'],['gift','Regalo'],['retry','Reintentar'],['again','Otra tarjeta']
+];
+const iconSvg = key => (ICONS[key] ? ICONS[key]() : ICONS.star());
+
+/* ---------------------------------------------------------------------
+   3. Store – persistencia local (localStorage) del prototipo.
+   En producción, la fuente de verdad será el backend.
+   --------------------------------------------------------------------- */
+const Store = {
+  get(key, fallback){
+    try{ const raw = localStorage.getItem(key); return raw ? Object.assign(fallback, JSON.parse(raw)) : fallback; }
+    catch(e){ return fallback; }
+  },
+  set(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} },
+  del(key){ try{ localStorage.removeItem(key); }catch(e){} }
+};
+const KEYS = {
+  admin:     APP_CONFIG.storageKey + '_admin',      // datos del administrador
+  adminAuth: APP_CONFIG.storageKey + '_auth',       // dispositivo autorizado como admin
+  invite: id => APP_CONFIG.storageKey + '_inv_' + id // estado de cada invitación (cliente)
+};
+
+/* ---------------------------------------------------------------------
+   Invite – codifica/decodifica el enlace que recibe el cliente.
+   El enlace lleva: id, nombre, nº de jugadas, WhatsApp del negocio y la
+   configuración de premios. Incluye una suma de verificación para
+   detectar ediciones casuales. ⚠️ No es seguridad real: la validación
+   definitiva irá en el backend (ver ProductionProvider).
+   --------------------------------------------------------------------- */
+const Invite = {
+  _hash(str){ // FNV-1a 32 bits
+    let h = 0x811c9dc5;
+    for(let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+    return h.toString(36);
+  },
+  _b64e(str){ return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); },
+  _b64d(str){ str = str.replace(/-/g,'+').replace(/_/g,'/'); while(str.length%4) str+='='; return decodeURIComponent(escape(atob(str))); },
+  newId(){ return Date.now().toString(36).slice(-5) + Math.random().toString(36).slice(2,6); },
+  encode(data){
+    const payload = this._b64e(JSON.stringify(data));
+    return payload + '.' + this._hash(APP_CONFIG.inviteSalt + payload);
+  },
+  decode(token){
+    try{
+      const [payload, sum] = String(token).split('.');
+      if(!payload || this._hash(APP_CONFIG.inviteSalt + payload) !== sum) return null;
+      const d = JSON.parse(this._b64d(payload));
+      if(!d || !d.i || !(d.n > 0)) return null;
+      return d;
+    }catch(e){ return null; }
+  },
+  /** Premios en formato compacto para el enlace */
+  packPrizes(prizes){ return prizes.map(p=>[p.id,p.tickets,p.icon,p.title,p.desc,p.weight,p.extra?1:0]); },
+  unpackPrizes(arr){
+    if(!Array.isArray(arr) || !arr.length) return JSON.parse(JSON.stringify(APP_CONFIG.defaultPrizes));
+    return arr.map(a=>({ id:a[0], tickets:+a[1]||0, icon:a[2], title:a[3], desc:a[4], weight:+a[5]||0, extra:a[6]===1 }));
+  },
+  baseUrl(){ return location.href.split('#')[0].split('?')[0]; }
+};
+
+/* Sorteo ponderado local (NO seguro) – compartido por ambos proveedores */
+function drawPrize(prizes){
+  const list = prizes.filter(p=>p.weight>0);
+  const total = list.reduce((s,p)=>s+p.weight,0);
+  if(!total) return prizes[prizes.length-1];
+  let r = Math.random()*total;
+  for(const p of list){ if((r-=p.weight) < 0) return p; }
+  return list[list.length-1];
+}
+
+/* ---------------------------------------------------------------------
+   4a. AdminProvider – el administrador juega sin límite (pruebas)
+   --------------------------------------------------------------------- */
+class AdminProvider {
+  constructor(){
+    this.role = 'admin';
+    this.state = Store.get(KEYS.admin, {
+      prizes: JSON.parse(JSON.stringify(APP_CONFIG.defaultPrizes)),
+      seq: 0, pending: null, history: [], invites: [],
+      pin: APP_CONFIG.defaultPin, wa: ''
+    });
+  }
+  _persist(){ Store.set(KEYS.admin, this.state); }
+  async getSummary(){
+    return { available: Infinity, totalTickets: this.state.history.reduce((s,h)=>s+(h.tickets||0),0), pending: this.state.pending };
+  }
+  async getPrizes(){ return this.state.prizes; }
+  async setPrizes(prizes){ this.state.prizes = prizes; this._persist(); }
+  async getHistory(){ return this.state.history.slice().reverse(); }
+  getPrizeById(id){ return this.state.prizes.find(x=>x.id===id); }
+
+  async startParticipation(){
+    if(this.state.pending) return this.state.pending;
+    const prize = drawPrize(this.state.prizes);
+    this.state.seq += 1;
+    this.state.pending = { code:'A'+String(this.state.seq).padStart(4,'0'), prizeId:prize.id, createdAt:new Date().toISOString() };
+    this._persist();
+    return this.state.pending;
+  }
+  async completeParticipation(code){
+    const p = this.state.pending;
+    if(!p || p.code !== code) return null;
+    const prize = this.getPrizeById(p.prizeId) || this.state.prizes[0];
+    this.state.history.push({ code:p.code, prizeId:prize.id, title:prize.title, tickets:prize.tickets, date:new Date().toISOString() });
+    if(this.state.history.length > 200) this.state.history.splice(0, this.state.history.length-200);
+    this.state.pending = null;
+    this._persist();
+    return prize;
+  }
+  clearHistory(){ this.state.history = []; this.state.pending = null; this.state.seq = 0; this._persist(); }
+
+  /* --- Ajustes de administrador --- */
+  checkPin(pin){ return String(pin) === String(this.state.pin || APP_CONFIG.defaultPin); }
+  setPin(pin){ this.state.pin = String(pin); this._persist(); }
+  setWa(wa){ this.state.wa = String(wa||'').replace(/\D/g,''); this._persist(); }
+
+  /* --- Invitaciones --- */
+  createInvite({ name, phone, plays }){
+    const id = Invite.newId();
+    const token = Invite.encode({
+      v:1, i:id, c:name, n:plays, w:this.state.wa,
+      p: Invite.packPrizes(this.state.prizes)
+    });
+    const url = Invite.baseUrl() + '?inv=' + token;
+    const inv = { id, name, phone:String(phone||'').replace(/\D/g,''), plays, url, date:new Date().toISOString() };
+    this.state.invites.unshift(inv);
+    if(this.state.invites.length > 50) this.state.invites.length = 50;
+    this._persist();
+    return inv;
+  }
+  getInvites(){ return this.state.invites; }
+}
+
+/* ---------------------------------------------------------------------
+   4b. InviteProvider – cliente que entra con su enlace personal.
+   Las jugadas usadas se guardan en el navegador del cliente por id de
+   invitación (prototipo: si borra los datos del navegador podría repetir;
+   el backend futuro lo impedirá).
+   --------------------------------------------------------------------- */
+class InviteProvider {
+  constructor(invite){
+    this.role = 'client';
+    this.invite = invite;
+    this.prizes = Invite.unpackPrizes(invite.p);
+    this.key = KEYS.invite(invite.i);
+    this.state = Store.get(this.key, { used:0, bonus:0, pending:null, history:[] });
+  }
+  _persist(){ Store.set(this.key, this.state); }
+  async getSummary(){
+    return {
+      available: Math.max(0, this.invite.n + (this.state.bonus||0) - this.state.used),
+      totalTickets: this.state.history.reduce((s,h)=>s+(h.tickets||0),0),
+      pending: this.state.pending
+    };
+  }
+  async getPrizes(){ return this.prizes; }
+  async getHistory(){ return this.state.history.slice().reverse(); }
+  getPrizeById(id){ return this.prizes.find(x=>x.id===id); }
+
+  async startParticipation(){
+    if(this.state.pending) return this.state.pending;
+    if(this.state.used >= this.invite.n + (this.state.bonus||0)) throw new Error('NO_PARTICIPATIONS');
+    const prize = drawPrize(this.prizes);
+    this.state.used += 1;   // se consume al abrir la tarjeta: una sola jugada
+    this.state.pending = { code: this.invite.i.toUpperCase().slice(0,6)+'-'+this.state.used, prizeId:prize.id, createdAt:new Date().toISOString() };
+    this._persist();
+    return this.state.pending;
+  }
+  async completeParticipation(code){
+    const p = this.state.pending;
+    if(!p || p.code !== code) return null;
+    const prize = this.getPrizeById(p.prizeId) || this.prizes[0];
+    this.state.history.push({ code:p.code, prizeId:prize.id, title:prize.title, tickets:prize.tickets, date:new Date().toISOString() });
+    if(prize.extra) this.state.bonus = (this.state.bonus||0) + 1;   // "Otra oportunidad": suma una tarjeta gratis
+    this.state.pending = null;
+    this._persist();
+    return prize;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   5. ProductionProvider – CONTRATO DE INTEGRACIÓN FUTURA (sin implementar)
+   ---------------------------------------------------------------------
+   Flujo previsto:
+     1. importClientFile(file)      Importar archivo exportado desde PrestaYa.
+     2. identifyClient(id)          Identificar al cliente participante.
+     3. validatePayments(clientId)  Cuotas pagadas a tiempo / anticipadas.
+     4. getSummary()                Participaciones disponibles (calculadas
+                                    por el BACKEND).
+     5. startParticipation()        El BACKEND asigna el premio y bloquea la
+                                    participación (una sola jugada).
+     6. completeParticipation(code) Registrar el premio entregado.
+     7. (Backend)                   Evitar reutilización: el enlace del cliente
+                                    pasará a ser un token firmado de un solo uso.
+     8. getHistory()                Historial de premios entregados.
+   El navegador nunca debe decidir el premio en producción: solo muestra
+   el resultado que devuelva el servidor.
+   --------------------------------------------------------------------- */
+class ProductionProvider {
+  constructor(){ throw new Error('ProductionProvider aún no implementado: requiere backend.'); }
+  /* async importClientFile(file){}        */
+  /* async identifyClient(clientId){}      */
+  /* async validatePayments(clientId){}    */
+  /* async getSummary(){}                  */
+  /* async getPrizes(){}                   */
+  /* async startParticipation(){}          */
+  /* async completeParticipation(code){}   */
+  /* async getHistory(){}                  */
+}
+
+/* ---------------------------------------------------------------------
+   6. ScratchCard – raspado real con Canvas (borrado progresivo)
+   --------------------------------------------------------------------- */
+class ScratchCard {
+  constructor(canvas, { threshold, fallback, brush, getTargetRect, onProgress, onReveal }){
+    this.canvas = canvas;
+    this.fallback = fallback || 0.7;
+    this.getTargetRect = getTargetRect || null;   // zona que debe quedar descubierta (texto del premio)
+    this.ctx = canvas.getContext('2d', { willReadFrequently:true });
+    this.threshold = threshold;
+    this.brush = brush;
+    this.onProgress = onProgress || (()=>{});
+    this.onReveal = onReveal || (()=>{});
+    this.drawing = false;
+    this.revealed = false;
+    this.last = null;
+    this._checkPending = false;
+    this._bind();
+  }
+
+  /** Dibuja la capa plateada con textura y textos. */
+  reset(){
+    this.revealed = false;
+    this.canvas.classList.remove('gone');
+    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    const rect = this.canvas.getBoundingClientRect();
+    this.w = rect.width; this.h = rect.height; this.dpr = dpr;
+    this.canvas.width = Math.round(rect.width*dpr);
+    this.canvas.height = Math.round(rect.height*dpr);
+    const c = this.ctx;
+    c.setTransform(dpr,0,0,dpr,0,0);
+    c.globalCompositeOperation = 'source-over';
+
+    // Base metálica
+    const g = c.createLinearGradient(0,0,this.w,this.h);
+    g.addColorStop(0,'#eef1f6'); g.addColorStop(.25,'#b9c1cf');
+    g.addColorStop(.5,'#e9edf3'); g.addColorStop(.75,'#a8b1c0'); g.addColorStop(1,'#dfe4ec');
+    c.fillStyle = g; c.fillRect(0,0,this.w,this.h);
+
+    // Grano / ruido fino
+    for(let i=0;i<this.w*this.h/18;i++){
+      const x=Math.random()*this.w, y=Math.random()*this.h, a=Math.random()*.08;
+      c.fillStyle = Math.random()>.5 ? `rgba(255,255,255,${a})` : `rgba(60,70,90,${a})`;
+      c.fillRect(x,y,1,1);
+    }
+    // Patrón de rombos sutil
+    c.strokeStyle='rgba(80,95,120,.10)'; c.lineWidth=1;
+    for(let i=-this.h;i<this.w;i+=18){
+      c.beginPath(); c.moveTo(i,0); c.lineTo(i+this.h,this.h); c.stroke();
+      c.beginPath(); c.moveTo(i+this.h,0); c.lineTo(i,this.h); c.stroke();
+    }
+    // Brillo diagonal
+    const sh = c.createLinearGradient(0,0,this.w,0);
+    sh.addColorStop(0,'rgba(255,255,255,0)'); sh.addColorStop(.5,'rgba(255,255,255,.35)'); sh.addColorStop(1,'rgba(255,255,255,0)');
+    c.save(); c.translate(this.w/2,this.h/2); c.rotate(-.6);
+    c.fillStyle=sh; c.fillRect(-this.w,-18,this.w*2,36); c.restore();
+
+    // Textos
+    c.textAlign='center'; c.textBaseline='middle';
+    c.fillStyle='rgba(11,35,80,.78)';
+    c.font=`900 ${Math.round(this.w*.11)}px system-ui,Arial`;
+    c.fillText('RASPA AQUÍ', this.w/2, this.h/2 - this.w*.04);
+    c.fillStyle='rgba(11,35,80,.55)';
+    c.font=`600 ${Math.round(this.w*.045)}px system-ui,Arial`;
+    c.fillText('Desliza tu dedo para descubrir tu premio', this.w/2, this.h/2 + this.w*.07);
+    // Icono moneda
+    c.beginPath(); c.arc(this.w/2, this.h/2 - this.w*.2, this.w*.06, 0, Math.PI*2);
+    c.fillStyle='rgba(22,179,100,.85)'; c.fill();
+    c.fillStyle='#fff'; c.font=`900 ${Math.round(this.w*.06)}px system-ui,Arial`;
+    c.fillText('$', this.w/2, this.h/2 - this.w*.2 + 1);
+
+    this.onProgress(0);
+  }
+
+  _bind(){
+    const cv = this.canvas;
+    const pos = e => { const r = cv.getBoundingClientRect(); return { x:e.clientX-r.left, y:e.clientY-r.top }; };
+    cv.addEventListener('pointerdown', e=>{
+      if(this.revealed) return;
+      e.preventDefault();
+      this.drawing = true; this.last = pos(e);
+      try{ cv.setPointerCapture(e.pointerId); }catch(_){}
+      this._scratch(this.last, this.last);
+    });
+    cv.addEventListener('pointermove', e=>{
+      if(!this.drawing || this.revealed) return;
+      e.preventDefault();
+      // Eventos coalescidos => trazos más suaves en pantallas de alta frecuencia
+      const evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+      for(const ev of (evs.length?evs:[e])){
+        const p = pos(ev); this._scratch(this.last, p); this.last = p;
+      }
+    });
+    const end = ()=>{ if(this.drawing){ this.drawing=false; this._scheduleCheck(true); } };
+    cv.addEventListener('pointerup', end);
+    cv.addEventListener('pointercancel', end);
+    cv.addEventListener('pointerleave', end);
+    // Evita gestos del navegador (scroll / zoom) sobre la tarjeta
+    cv.addEventListener('touchstart', e=>e.preventDefault(), { passive:false });
+    cv.addEventListener('touchmove',  e=>e.preventDefault(), { passive:false });
+  }
+
+  _scratch(a, b){
+    const c = this.ctx;
+    c.globalCompositeOperation = 'destination-out';
+    c.lineCap='round'; c.lineJoin='round';
+    c.lineWidth = this.brush*2;
+    c.beginPath(); c.moveTo(a.x,a.y); c.lineTo(b.x,b.y); c.stroke();
+    c.beginPath(); c.arc(b.x,b.y,this.brush,0,Math.PI*2); c.fill();
+    this._scheduleCheck(false);
+  }
+
+  /** Calcula el % raspado por muestreo en rejilla (una vez por fotograma). */
+  _scheduleCheck(force){
+    if(this._checkPending && !force) return;
+    this._checkPending = true;
+    requestAnimationFrame(()=>{
+      this._checkPending = false;
+      const rect = this.getTargetRect ? this.getTargetRect() : null;
+      const textPct = rect ? this.getScratchedRatio(rect) : this.getScratchedRatio();
+      const totalPct = rect ? this.getScratchedRatio() : textPct;
+      // Progreso = avance sobre la zona del texto (llena la barra al revelarse)
+      this.onProgress(Math.min(1, textPct / this.threshold));
+      if(!this.revealed && (textPct >= this.threshold || totalPct >= this.fallback)) this.reveal();
+    });
+  }
+
+  /** % raspado de toda la tarjeta o de un rectángulo (en px CSS relativos al canvas). */
+  getScratchedRatio(rect){
+    const { width, height } = this.canvas;
+    if(!width || !height) return 0;
+    const d = this.dpr || 1;
+    let x0=0, y0=0, w=width, h=height;
+    if(rect){
+      x0 = Math.max(0, Math.floor(rect.x*d)); y0 = Math.max(0, Math.floor(rect.y*d));
+      w = Math.min(width-x0, Math.ceil(rect.w*d)); h = Math.min(height-y0, Math.ceil(rect.h*d));
+      if(w<=0 || h<=0) return 0;
+    }
+    const data = this.ctx.getImageData(x0,y0,w,h).data;
+    const step = Math.max(3, Math.round((rect?4:6)*d));
+    let total=0, clear=0;
+    for(let y=0;y<h;y+=step){
+      for(let x=0;x<w;x+=step){
+        total++;
+        if(data[(y*w+x)*4+3] < 128) clear++;
+      }
+    }
+    return total ? clear/total : 0;
+  }
+
+  reveal(){
+    if(this.revealed) return;
+    this.revealed = true;
+    this.drawing = false;
+    this.onProgress(1);
+    this.canvas.classList.add('gone');
+    setTimeout(()=>this.onReveal(), 650);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   7. Confetti – celebración sutil con colores corporativos
+   --------------------------------------------------------------------- */
+const Confetti = (()=>{
+  const cv = document.getElementById('fx');
+  const ctx = cv.getContext('2d');
+  let parts=[], raf=null;
+  const colors=['#b6f23a','#16b364','#2a6fe0','#ffffff','#8fb6ff'];
+  function resize(){ const d=Math.min(devicePixelRatio||1,2); cv.width=innerWidth*d; cv.height=innerHeight*d; ctx.setTransform(d,0,0,d,0,0); }
+  addEventListener('resize', resize); resize();
+  function burst(n=140){
+    resize();
+    for(let i=0;i<n;i++){
+      parts.push({
+        x: innerWidth/2 + (Math.random()-.5)*80, y: innerHeight*.35,
+        vx:(Math.random()-.5)*11, vy:-Math.random()*13-4,
+        s:Math.random()*7+4, r:Math.random()*6, vr:(Math.random()-.5)*.3,
+        c:colors[(Math.random()*colors.length)|0], life:0, max:110+Math.random()*60,
+        shape:Math.random()>.5?'rect':'circle'
+      });
+    }
+    if(!raf) loop();
+  }
+  function loop(){
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+    parts = parts.filter(p=>p.life<p.max && p.y<innerHeight+30);
+    for(const p of parts){
+      p.life++; p.vy+=.32; p.vx*=.99; p.x+=p.vx; p.y+=p.vy; p.r+=p.vr;
+      ctx.save(); ctx.globalAlpha=Math.max(0,1-p.life/p.max);
+      ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c;
+      if(p.shape==='rect') ctx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);
+      else { ctx.beginPath(); ctx.arc(0,0,p.s/3,0,Math.PI*2); ctx.fill(); }
+      ctx.restore();
+    }
+    raf = parts.length ? requestAnimationFrame(loop) : (ctx.clearRect(0,0,innerWidth,innerHeight), null);
+  }
+  return { burst };
+})();
+
+/* ---------------------------------------------------------------------
+   8. UI / Controlador
+   --------------------------------------------------------------------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let provider = null;           // AdminProvider | InviteProvider
+let currentParticipation = null;
+let lastPrize = null;
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active', s.id===id));
+  window.scrollTo(0,0);
+}
+function toast(msg){
+  const t=$('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2400);
+}
+function vibrate(p){ try{ navigator.vibrate && navigator.vibrate(p); }catch(e){} }
+function fmtDate(iso){
+  const d=new Date(iso);
+  return d.toLocaleDateString('es-CO',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+}
+/** Número para wa.me: 10 dígitos colombianos => se antepone 57 */
+function waNumber(n){ n = String(n||'').replace(/\D/g,''); return n.length===10 ? '57'+n : n; }
+function openWa(number, text){
+  const num = waNumber(number);
+  window.open('https://wa.me/' + (num||'') + '?text=' + encodeURIComponent(text), '_blank');
+}
+async function copyText(txt){
+  try{ await navigator.clipboard.writeText(txt); return true; }
+  catch(e){
+    const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select();
+    let ok=false; try{ ok=document.execCommand('copy'); }catch(_){}
+    ta.remove(); return ok;
+  }
+}
+
+/* ----- Arranque según el rol ----- */
+function boot(){
+  $('appVersion').textContent = APP_CONFIG.version;
+  document.querySelectorAll('.ver').forEach(e=>e.textContent=APP_CONFIG.version);
+
+  const token = new URLSearchParams(location.search).get('inv');
+  if(token){
+    const inv = Invite.decode(token);
+    if(!inv){ showLock('Este enlace no es válido o fue modificado. Pide uno nuevo a PrestaYa.'); return; }
+    provider = new InviteProvider(inv);
+    enterClient();
+    return;
+  }
+  // Sin enlace de invitación => administrador (jugadas infinitas)
+  enterAdmin();
+}
+function showLock(msg){
+  provider = null;
+  $('adminActions').classList.add('hidden');
+  $('adminPill').classList.add('hidden');
+  $('demoTag').classList.add('hidden');
+  if(msg) document.querySelector('#scrLock p').textContent = msg;
+  showScreen('scrLock');
+}
+function enterAdmin(){
+  provider = new AdminProvider();
+  $('adminActions').classList.remove('hidden');
+  $('adminPill').classList.remove('hidden');
+  $('demoTag').classList.remove('hidden');
+  $('helloName').classList.add('hidden');
+  $('historyTitle').textContent = 'Historial de pruebas';
+  showScreen('scrHome'); renderHome();
+}
+function enterClient(){
+  $('adminActions').classList.add('hidden');
+  $('adminPill').classList.add('hidden');
+  $('demoTag').classList.add('hidden');
+  const name = (provider.invite.c||'').trim();
+  if(name){ $('helloName').textContent = '¡Hola, ' + name.split(' ')[0] + '!'; $('helloName').classList.remove('hidden'); }
+  $('historyTitle').textContent = 'Tus premios';
+  showScreen('scrHome'); renderHome();
+}
+
+/* ----- Inicio ----- */
+async function renderHome(){
+  const s = await provider.getSummary();
+  const isAdmin = provider.role === 'admin';
+  $('statAvail').textContent = s.available === Infinity ? '∞' : s.available;
+  $('statTickets').textContent = s.totalTickets;
+  const btn = $('btnPlay');
+  if(s.pending){
+    btn.disabled=false; $('btnPlayText').textContent='Continuar mi tarjeta';
+    $('homeHint').textContent='Tienes una tarjeta en curso sin terminar de raspar.';
+  }else if(s.available>0){
+    btn.disabled=false; $('btnPlayText').textContent='Raspar mi tarjeta';
+    $('homeHint').textContent = isAdmin ? 'Modo administrador: puedes jugar sin límite para probar.' : 'Cada participación permite una sola jugada.';
+  }else{
+    btn.disabled=true; $('btnPlayText').textContent='Sin participaciones';
+    $('homeHint').textContent='Ya usaste todas tus participaciones. Paga tus cuotas a tiempo para ganar más.';
+  }
+  const hist = await provider.getHistory();
+  $('historyList').innerHTML = hist.length
+    ? hist.slice(0,50).map(h=>`<li><span>${esc(h.code)} · ${esc(h.title)}</span><span>${fmtDate(h.date)}</span></li>`).join('')
+    : '<li class="empty">Aún no has jugado.</li>';
+}
+
+/* ----- Juego ----- */
+const scratch = new ScratchCard($('scratchCanvas'), {
+  threshold: APP_CONFIG.revealThreshold,
+  fallback: APP_CONFIG.fallbackThreshold,
+  brush: APP_CONFIG.brushRadius,
+  // Zona del texto del premio (título + descripción) relativa al canvas
+  getTargetRect: () => {
+    const cv = $('scratchCanvas').getBoundingClientRect();
+    const els = [...document.querySelectorAll('#prizeUnder .p-title, #prizeUnder .p-desc')];
+    if(!els.length) return null;
+    let l=Infinity,t=Infinity,r=-Infinity,b=-Infinity;
+    for(const el of els){
+      // Rango del texto real (no el ancho completo del bloque)
+      const range = document.createRange(); range.selectNodeContents(el);
+      const rc = range.getBoundingClientRect();
+      l=Math.min(l,rc.left); t=Math.min(t,rc.top); r=Math.max(r,rc.right); b=Math.max(b,rc.bottom);
+    }
+    return { x:l-cv.left, y:t-cv.top, w:r-l, h:b-t };
+  },
+  onProgress: pct => {
+    const v = Math.round(pct*100);
+    $('pctText').textContent = v+'%';
+    $('pctBar').style.width = v+'%';
+  },
+  onReveal: finishGame
+});
+
+async function startGame(){
+  stopExtraCountdown();
+  try{ currentParticipation = await provider.startParticipation(); }
+  catch(err){ toast('No tienes participaciones disponibles'); return renderHome(); }
+  const prize = provider.getPrizeById(currentParticipation.prizeId);
+  $('ticketCode').textContent = '#'+currentParticipation.code;
+  const win = prize.tickets>0 || !!prize.extra;
+  $('prizeUnder').className = 'prize-under' + (win?' win':'');
+  $('prizeUnder').innerHTML = `<div class="p-icon">${iconSvg(prize.icon)}</div>
+    <div class="p-title">${esc(prize.title)}</div><div class="p-desc">${esc(prize.desc)}</div>`;
+  showScreen('scrGame');
+  requestAnimationFrame(()=>scratch.reset());
+}
+
+async function finishGame(){
+  const code = currentParticipation && currentParticipation.code;
+  const prize = await provider.completeParticipation(code);
+  if(!prize) return;
+  lastPrize = { prize, code };
+  const win = prize.tickets>0;
+  const extra = !!prize.extra;
+  $('resultCard').classList.toggle('win', win || extra);
+  $('rIcon').innerHTML = iconSvg(prize.icon);
+  $('rTitle').textContent = prize.title;
+  $('rDesc').textContent = prize.desc;
+  $('rBoletas').innerHTML = win
+    ? `<div class="boletas"><b>${prize.tickets}</b><span>${prize.tickets===1?'boleta obtenida':'boletas obtenidas'}</span></div>`
+    : '';
+  $('rThanks').textContent = extra
+    ? '¡Tienes otra oportunidad de ganar! Prepárate para raspar.'
+    : win
+    ? '¡Gracias por tu puntualidad! Sigue pagando a tiempo y acumula más oportunidades.'
+    : 'Gracias por ser un cliente cumplido. Tu próxima cuota puntual te da una nueva oportunidad.';
+  $('rCode').textContent = code;
+  // El cliente puede reportar su premio al WhatsApp del negocio (si el admin lo configuró)
+  const canReport = provider.role==='client' && win && !extra && provider.invite.w;
+  $('btnReport').classList.toggle('hidden', !canReport);
+  // "Otra oportunidad": cuenta regresiva y nueva tarjeta automática
+  $('rExtra').classList.toggle('hidden', !extra);
+  $('btnPlayAgain').classList.toggle('hidden', !extra);
+  $('btnHome').classList.toggle('hidden', extra);
+  currentParticipation = null;
+  showScreen('scrResult');
+  if(win || extra){ setTimeout(()=>Confetti.burst(extra ? 110 : 90 + prize.tickets*40), 150); vibrate([40,60,80]); }
+  else vibrate(30);
+  if(extra) startExtraCountdown(3);
+}
+
+/* Cuenta regresiva para la tarjeta extra */
+let extraTimer = null;
+function stopExtraCountdown(){ clearInterval(extraTimer); extraTimer = null; }
+function startExtraCountdown(sec){
+  stopExtraCountdown();
+  let n = sec; $('rCount').textContent = n;
+  extraTimer = setInterval(()=>{
+    n -= 1;
+    if(n <= 0){ stopExtraCountdown(); startGame(); return; }
+    $('rCount').textContent = n;
+  }, 1000);
+}
+$('btnPlayAgain').onclick = ()=>{ stopExtraCountdown(); startGame(); };
+$('btnReport').onclick = ()=>{
+  if(!lastPrize || provider.role!=='client') return;
+  const name = provider.invite.c || 'cliente';
+  openWa(provider.invite.w, `Hola PrestaYa 👋 Soy ${name}. En Raspa y Gana obtuve: ${lastPrize.prize.title} (participación ${lastPrize.code}).`);
+};
+
+/* ----- Configuración (solo admin) ----- */
+let cfgDraft = [];
+function openSheet(id){ $(id).classList.add('open'); $('sheetBackdrop').classList.add('open'); }
+function closeSheets(){ document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('open')); $('sheetBackdrop').classList.remove('open'); }
+async function openConfig(){
+  if(!provider || provider.role!=='admin') return;
+  cfgDraft = JSON.parse(JSON.stringify(await provider.getPrizes()));
+  $('cfgWa').value = provider.state.wa || '';
+  renderCfg(); openSheet('sheet');
+}
+function renderCfg(){
+  $('cfgList').innerHTML = cfgDraft.map((p,i)=>`
+    <div class="cfg-item">
+      <div class="cfg-head"><b>Premio ${i+1}</b>
+        <button class="del-prize" type="button" data-del="${i}" aria-label="Eliminar premio" ${cfgDraft.length<=1?'disabled style="opacity:.35"':''}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>
+        </button></div>
+      <div class="cfg-row">
+        <div class="field"><label>Título</label><input data-i="${i}" data-k="title" value="${esc(p.title)}" maxlength="40"></div>
+      </div>
+      <div class="cfg-row">
+        <div class="field"><label>Descripción</label><input data-i="${i}" data-k="desc" value="${esc(p.desc)}" maxlength="110"></div>
+      </div>
+      <div class="cfg-row">
+        <div class="field"><label>Tipo de premio</label><select data-i="${i}" data-k="type">
+          <option value="tickets" ${!p.extra?'selected':''}>Boletas</option>
+          <option value="extra" ${p.extra?'selected':''}>Otra oportunidad (nueva tarjeta)</option>
+        </select></div>
+      </div>
+      <div class="cfg-row">
+        <div class="field"><label>Icono</label><select data-i="${i}" data-k="icon">
+          ${ICON_OPTIONS.map(([k,l])=>`<option value="${k}" ${k===p.icon?'selected':''}>${l}</option>`).join('')}
+        </select></div>
+        <div class="field w-sm"><label>Boletas</label><input type="number" min="0" max="10" inputmode="numeric" data-i="${i}" data-k="tickets" value="${p.tickets}"></div>
+        <div class="field w-sm"><label>Peso</label><input type="number" min="0" max="1000" inputmode="numeric" data-i="${i}" data-k="weight" value="${p.weight}"></div>
+      </div>
+    </div>`).join('');
+  updateProbNote();
+}
+function updateProbNote(){
+  const total = cfgDraft.reduce((s,p)=>s+(+p.weight||0),0);
+  $('probNote').textContent = total
+    ? 'Probabilidad aprox.: ' + cfgDraft.map((p,i)=>`P${i+1} ${Math.round((+p.weight||0)/total*100)}%`).join(' · ')
+    : 'Asigna al menos un peso mayor a 0.';
+}
+$('cfgList').addEventListener('input', e=>{
+  const el=e.target; const i=+el.dataset.i, k=el.dataset.k; if(isNaN(i)) return;
+  if(k==='type'){
+    const ex = el.value==='extra'; cfgDraft[i].extra = ex;
+    if(ex){ cfgDraft[i].tickets = 0; cfgDraft[i].icon = 'again';
+      if(/nuevo premio/i.test(cfgDraft[i].title)) { cfgDraft[i].title = '¡Ganaste otro raspa!'; cfgDraft[i].desc = 'Se activará una nueva tarjeta para que vuelvas a intentarlo.'; } }
+    renderCfg(); return;
+  }
+  cfgDraft[i][k] = (k==='weight'||k==='tickets') ? Math.max(0, parseInt(el.value)||0) : el.value;
+  if(k==='weight'||k==='tickets') updateProbNote();
+});
+$('btnSaveCfg').onclick = async ()=>{
+  if(!cfgDraft.some(p=>p.weight>0)) return toast('Asigna al menos un peso mayor a 0');
+  await provider.setPrizes(cfgDraft);
+  provider.setWa($('cfgWa').value);
+  closeSheets(); renderHome(); toast('Configuración guardada');
+};
+$('btnAddPrize').onclick = ()=>{
+  if(cfgDraft.length >= 12) return toast('Máximo 12 premios');
+  cfgDraft.push({ id:'p'+Date.now().toString(36), tickets:1, icon:'star', title:'Nuevo premio', desc:'Describe aquí el premio.', weight:10 });
+  renderCfg();
+  const items = $('cfgList').querySelectorAll('.cfg-item');
+  const last = items[items.length-1];
+  last.scrollIntoView({ behavior:'smooth', block:'center' });
+  setTimeout(()=>{ const inp = last.querySelector('input'); inp.focus(); inp.select(); }, 350);
+};
+$('cfgList').addEventListener('click', e=>{
+  const b = e.target.closest('[data-del]'); if(!b) return;
+  if(cfgDraft.length <= 1) return toast('Debe quedar al menos un premio');
+  const i = +b.dataset.del;
+  if(!confirm('¿Eliminar "' + (cfgDraft[i].title||'este premio') + '"?')) return;
+  cfgDraft.splice(i,1); renderCfg(); toast('Premio eliminado (pulsa Guardar)');
+});
+$('btnDefaults').onclick = ()=>{ cfgDraft = JSON.parse(JSON.stringify(APP_CONFIG.defaultPrizes)); renderCfg(); toast('Premios restablecidos (pulsa Guardar)'); };
+$('btnResetDemo').onclick = ()=>{
+  if(!confirm('¿Borrar el historial de pruebas del administrador?')) return;
+  provider.clearHistory(); closeSheets(); showScreen('scrHome'); renderHome(); toast('Historial borrado');
+};
+$('btnCloseCfg').onclick = closeSheets;
+$('sheetBackdrop').onclick = closeSheets;
+$('btnConfig').onclick = openConfig;
+
+/* ----- Compartir enlace (solo admin) ----- */
+let lastInvite = null;
+function inviteMessage(inv){
+  const first = (inv.name||'').trim().split(' ')[0];
+  return `Hola${first?' '+first:''} 👋 En PrestaYa valoramos tu puntualidad. ` +
+         `Tienes ${inv.plays} ${inv.plays===1?'tarjeta':'tarjetas'} de *Raspa y Gana* 🎁. ` +
+         `Entra aquí y descubre tu premio:\n${inv.url}`;
+}
+function openShare(){
+  if(!provider || provider.role!=='admin') return;
+  $('fileWarn').classList.toggle('hidden', location.protocol.startsWith('http'));
+  $('linkResult').classList.add('hidden');
+  renderInvites(); openSheet('shareSheet');
+}
+function renderInvites(){
+  const list = provider.getInvites();
+  $('invList').innerHTML = list.length ? list.slice(0,20).map((v,i)=>`
+    <li><div class="who">${esc(v.name||'Cliente')}<small>${v.plays} ${v.plays===1?'jugada':'jugadas'} · ${fmtDate(v.date)}</small></div>
+      <button class="mini-btn" data-act="wa" data-i="${i}">WhatsApp</button>
+      <button class="mini-btn" data-act="copy" data-i="${i}">Copiar</button></li>`).join('')
+    : '<li><span class="who" style="color:var(--muted)">Aún no has generado enlaces.</span></li>';
+}
+$('invList').addEventListener('click', async e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  const inv = provider.getInvites()[+b.dataset.i]; if(!inv) return;
+  if(b.dataset.act==='wa') openWa(inv.phone, inviteMessage(inv));
+  else toast(await copyText(inv.url) ? 'Enlace copiado' : 'No se pudo copiar');
+});
+$('btnGenLink').onclick = ()=>{
+  const name = $('invName').value.trim();
+  const plays = Math.max(1, Math.min(10, parseInt($('invPlays').value)||1));
+  if(!name) return toast('Escribe el nombre del cliente');
+  lastInvite = provider.createInvite({ name, phone:$('invPhone').value, plays });
+  $('linkBox').value = lastInvite.url;
+  $('linkResult').classList.remove('hidden');
+  $('btnNativeShare').classList.toggle('hidden', !navigator.share);
+  $('btnCopyLink').style.gridColumn = navigator.share ? '' : '1 / -1';
+  renderInvites(); toast('Enlace generado');
+};
+$('btnSendWa').onclick = ()=>{ if(lastInvite) openWa(lastInvite.phone, inviteMessage(lastInvite)); };
+$('btnCopyLink').onclick = async ()=>{ if(lastInvite) toast(await copyText(lastInvite.url) ? 'Enlace copiado' : 'No se pudo copiar'); };
+$('btnNativeShare').onclick = ()=>{
+  if(lastInvite && navigator.share) navigator.share({ title:'Raspa y Gana – PrestaYa', text:inviteMessage(lastInvite).replace(lastInvite.url,'').trim(), url:lastInvite.url }).catch(()=>{});
+};
+$('btnTestLink').onclick = ()=>{ if(lastInvite) window.open(lastInvite.url, '_blank'); };
+$('btnCloseShare').onclick = closeSheets;
+$('btnShare').onclick = openShare;
+
+/* ----- Navegación ----- */
+$('btnPlay').onclick = startGame;
+$('btnHome').onclick = ()=>{ showScreen('scrHome'); renderHome(); };
+window.addEventListener('resize', ()=>{
+  if($('scrGame').classList.contains('active') && !scratch.revealed && scratch.getScratchedRatio()<0.02) scratch.reset();
+});
+
+boot();
+
+/* PWA: registra el service worker cuando se sirve desde el repositorio */
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
